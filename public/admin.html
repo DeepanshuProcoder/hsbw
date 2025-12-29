@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <h1>Admin Dashboard</h1>
+  <a href="/admin/logout">Logout</a>
+</nav>
+
+<div class="container">
+  <h2>Bookings</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="data"></tbody>
+  </table>
+</div>
+
+<script>
+fetch("/admin/bookings")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("data").innerHTML =
+      data.map(b => `
+        <tr>
+          <td>${b.name}</td>
+          <td>${b.phone}</td>
+          <td>${b.email}</td>
+          <td>${b.date}</td>
+        </tr>`).join("");
+  });
+</script>
+
+</body>
+</html>
