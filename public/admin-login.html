@@ -4,33 +4,47 @@
   <title>Admin Login</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .but{
-      width: 343.2px;
+    .pip{
+      width: 323.2px;
+    }
+    .op{
+      text-align: center;
+      justify-content: center;
+    }
+    .mim{
+      margin-right: 20px;
     }
   </style>
 </head>
-<body>
+<body class="bg" style="background-image:url('login.jpg')">
 <nav>
   <a href="index.html">Home</a>
+  <a href="register.html">Register</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="facilities.html">Facilities</a>
+  <a href="admin-login.html">Admin</a>
 </nav>
+
 <div class="card">
-  <h2>Admin Login</h2>
-  <form method="POST" action="admin-login">
-    <input name="username" placeholder="Admin ID" required>
+  <h2 class="op">Admin Login</h2>
+
+  <div id="errorBox" class="error-box">
+    Invalid username or password
+  </div>
+
+  <form class="mim" method="POST" action="/admin-login">
+    <input type="text" name="username" placeholder="Username" required>
     <input type="password" name="password" placeholder="Password" required>
-    <div id="error-box" class="error-box">
-    ❌ Invalid username or password
-    </div>
-    <button class="but">Login</button>
+    <button class="pip" type="submit">Login</button>
   </form>
 </div>
+
 <script>
   const params = new URLSearchParams(window.location.search);
-  if (params.get("error") === "1") {
-    document.getElementById("error-box").style.display = "block";
+  if (params.get("error")) {
+    document.getElementById("errorBox").style.display = "block";
   }
 </script>
 
 </body>
 </html>
-
