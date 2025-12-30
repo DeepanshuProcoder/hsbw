@@ -4,41 +4,29 @@
   <title>Register | HSBW</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg" style="background-image:url('register.jpg')">
 
 <nav>
-  <h1>HSBW</h1>
+  <a href="index.html">Home</a>
+  <a href="register.html">Register</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="facilities.html">Facilities</a>
 </nav>
 
-<div class="container">
-  <h2>Register for Home Stay</h2>
+<div class="card">
+  <h2>Book Your Stay</h2>
+  <input type="text" placeholder="Full Name" required>
+  <input type="email" placeholder="Email" required>
 
-  <form id="bookingForm">
-    <input name="name" placeholder="Full Name" required>
-    <input name="phone" placeholder="Mobile Number" required>
-    <input name="email" placeholder="Email">
-    <input type="date" id="date" name="date" required>
-    <button>Book Now</button>
-  </form>
+  <label>Check-in Date</label>
+  <input type="date" id="checkin" required>
+
+  <button>Proceed</button>
 </div>
 
 <script>
-const today = new Date().toLocaleDateString("en-CA", {
-  timeZone: "Asia/Kolkata"
-});
-document.getElementById("date").min = today;
-
-document.getElementById("bookingForm").onsubmit = async e => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target));
-  await fetch("/book", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(data)
-  });
-  alert("Booking Successful");
-  e.target.reset();
-};
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("checkin").min = today;
 </script>
 
 </body>
