@@ -3,18 +3,34 @@
 <head>
   <title>Admin Login</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .but{
+      width: 343.2px;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
+<nav>
+  <a href="index.html">Home</a>
+</nav>
+<div class="card">
   <h2>Admin Login</h2>
-
-  <form method="POST" action="/admin/login">
-    <input name="username" placeholder="Username" required>
+  <form method="POST" action="admin-login">
+    <input name="username" placeholder="Admin ID" required>
     <input type="password" name="password" placeholder="Password" required>
-    <button>Login</button>
+    <div id="error-box" class="error-box">
+    ❌ Invalid username or password
+    </div>
+    <button class="but">Login</button>
   </form>
 </div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("error") === "1") {
+    document.getElementById("error-box").style.display = "block";
+  }
+</script>
 
 </body>
 </html>
+
