@@ -1,75 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
+  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  background: #0b0b0b;
   color: #fff;
-  min-height: 100vh;
 }
 
 nav {
+  padding: 15px;
   background: rgba(0,0,0,0.8);
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-nav h1 {
-  color: gold;
+  text-align: center;
 }
 
 nav a {
-  color: white;
-  margin-left: 20px;
-  text-decoration: none;
-}
-
-.container {
-  max-width: 1100px;
-  margin: 60px auto;
-  background: rgba(255,255,255,0.08);
-  padding: 40px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-}
-
-h2 {
   color: gold;
-  margin-bottom: 20px;
+  margin: 15px;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-input, select {
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
+.hero {
+  height: 90vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  background: rgba(0,0,0,0.65);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay h1 {
+  font-size: 3rem;
+  color: gold;
+}
+
+.btn {
+  background: gold;
+  padding: 12px 25px;
+  color: black;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.about {
+  padding: 40px;
+  text-align: center;
+}
+
+.card {
+  background: rgba(0,0,0,0.8);
+  width: 320px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
 }
 
 button {
   background: gold;
-  padding: 14px;
-  border-radius: 30px;
   border: none;
-  font-weight: bold;
   cursor: pointer;
 }
 
-table {
+.bg {
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.pricing {
+  display: flex;
+  width: 80%;
+  margin: 60px auto;
+  background: rgba(0,0,0,0.8);
+  border-radius: 15px;
+}
+
+.pricing img {
+  width: 50%;
+}
+
+.pricing div {
+  padding: 30px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.gallery img {
   width: 100%;
-  border-collapse: collapse;
+  border-radius: 12px;
 }
 
-th, td {
-  padding: 15px;
-  border-bottom: 1px solid #aaa;
+.center {
+  text-align: center;
+  margin-top: 30px;
 }
 
-th {
-  color: gold;
+.dashboard {
+  text-align: center;
+  padding: 60px;
+}
+
+.stats div {
+  background: rgba(255,255,255,0.1);
+  margin: 15px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.logout {
+  background: red;
+  color: white;
+}
+.error-box {
+  display: none;
+  background: rgba(255, 0, 0, 0.12);
+  color: #ff3b3b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
 }
