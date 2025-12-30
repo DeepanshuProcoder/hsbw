@@ -6,40 +6,17 @@
 </head>
 <body>
 
-<nav>
+<section class="dashboard">
   <h1>Admin Dashboard</h1>
-  <a href="/admin/logout">Logout</a>
-</nav>
 
-<div class="container">
-  <h2>Bookings</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody id="data"></tbody>
-  </table>
-</div>
+  <div class="stats">
+    <div>🏠 Total Bookings: 28</div>
+    <div>💰 Revenue: ₹1,40,000</div>
+    <div>📅 Active Guests: 6</div>
+  </div>
 
-<script>
-fetch("/admin/bookings")
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById("data").innerHTML =
-      data.map(b => `
-        <tr>
-          <td>${b.name}</td>
-          <td>${b.phone}</td>
-          <td>${b.email}</td>
-          <td>${b.date}</td>
-        </tr>`).join("");
-  });
-</script>
+  <a href="/logout" class="btn logout">Logout</a>
+</section>
 
 </body>
 </html>
