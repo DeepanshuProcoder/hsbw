@@ -1,123 +1,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HSBW Admin Dashboard</title>
+  <title>Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      background: #0b0b0b;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-
-    nav {
-      padding: 15px;
-      background: #111;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    nav a {
-      color: gold;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .container {
-      width: 95%;
-      margin: 40px auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #111;
-    }
-
-    th, td {
-      padding: 12px;
-      border: 1px solid #333;
-      text-align: center;
-    }
-
-    th {
-      background: #1c1c1c;
-      color: gold;
-    }
-
-    tr:nth-child(even) {
-      background: #151515;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: gold;
+    .copyright{
+      color: red;
+      margin-top: 90px;
     }
   </style>
 </head>
 
 <body class="bg" style="background-image:url('dashboard.jpg')">
 
-<nav>
-  <span>HSBW Admin Dashboard</span>
-  <a class="logout" href="/logout">Logout</a>
-</nav>
+<h2 class="center">Admin Dashboard</h2>
 
-<div class="container">
-  <h2>Registered Guests</h2>
-
-  <table id="regTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Check-in</th>
-        <th>Days</th>
-        <th>Registered At</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Data will load here -->
-    </tbody>
-  </table>
+<div class="controls">
+  <button class="btn-view" onclick="loadActive()">View Registrations</button>
+  <button class="btn-manage" onclick="toggleManage()">Manage</button>
+  <button class="btn-deleted" onclick="loadDeleted()">Deleted</button>
+  <a href="/logout"><button class="btn-logout">Logout</button></a>
 </div>
 
+<div id="modeIndicator" style="margin-bottom:10px;font-weight:600; color: black;">
+  Mode: VIEW
+</div>
+
+<div id="stats" style="display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap">
+  <div class="stats-card" id="totalCount">Total: 0</div>
+  <div class="stats-card" id="activeCount">Active: 0</div>
+  <div class="stats-card" id="deletedCount">Deleted: 0</div>
+</div>
+
+<select id="sortSelect" style="padding:8px;border-radius:8px;margin-bottom:15px; background-color: gold;">
+  <option value="">Sort By</option>
+  <option value="name">Name (A–Z)</option>
+  <option value="date">Check-in Date</option>
+  <option value="days">Days</option>
+</select>
+
+<input
+  type="text"
+  id="searchBox"
+  placeholder="Search bookings..."
+  style="padding:10px;width:100%;margin-bottom:15px;border-radius:8px;border:none; background-color: rgb(64, 65, 65); color: ivory;"
+/>
+
+<table id="table"></table>
+
 <script>
-fetch("/api/registrations")
+let originalData = [];
+let manageMode = false;
+let currentView = "active";
+
+/* 🔐 SESSION CHECK */
+fetch("/admin/registrations", { credentials: "same-origin" })
   .then(res => {
-    if (!res.ok) {
-      alert("Unauthorized access. Please login again.");
+    if (res.status === 401) {
       window.location.href = "/admin-login.html";
     }
-    return res.json();
-  })
-  .then(data => {
-    const tbody = document.querySelector("#regTable tbody");
-
-    if (data.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='7'>No registrations yet</td></tr>";
-      return;
-    }
-
-    data.forEach((r, i) => {
-      const row = `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${r.name}</td>
-          <td>${r.email}</td>
-          <td>${r.phone}</td>
-          <td>${r.checkin}</td>
-          <td>${r.days}</td>
-          <td>${r.createdAt}</td>
-        </tr>
-      `;
-      tbody.innerHTML += row;
-    });
   });
+
+async function loadActive() {
+  currentView = "active";
+  const res = await fetch("/admin/registrations", { credentials: "same-origin" });
+  const data = await res.json();
+  originalData = data;
+  render(data);
+  updateStats();
+}
+
+async function loadDeleted() {
+  currentView = "deleted";
+  const res = await fetch("/admin/deleted", { credentials: "same-origin" });
+  const data = await res.json();
+  originalData = data;
+  render(data);
+  updateStats();
+}
+
+function toggleManage() {
+  manageMode = !manageMode;
+  document.getElementById("modeIndicator").innerText =
+    manageMode ? "Mode: MANAGE (Delete Enabled)" : "Mode: VIEW";
+  currentView === "active" ? loadActive() : loadDeleted();
+}
+
+function render(data) {
+  let html = `
+    <tr>
+      <th>Name</th><th>Email</th><th>Phone</th>
+      <th>Check-in</th><th>Days</th>
+      ${manageMode ? "<th>Action</th>" : ""}
+    </tr>
+  `;
+
+  data.forEach(r => {
+    html += `
+      <tr>
+        <td>${r.name}</td>
+        <td>${r.email}</td>
+        <td>${r.phone}</td>
+        <td>${r.checkin}</td>
+        <td>${r.days}</td>
+        ${
+          manageMode
+            ? `<td>
+                ${
+                  currentView === "active"
+                    ? `<button class="danger" onclick="del('${r.id}')">Delete</button>`
+                    : `<button onclick="restore('${r.id}')">Restore</button>`
+                }
+              </td>`
+            : ""
+        }
+      </tr>`;
+  });
+
+  document.getElementById("table").innerHTML = html;
+}
+
+async function del(id) {
+  if (!confirm("Delete this booking?")) return;
+
+  const res = await fetch("/admin/delete/" + id, {
+    method: "DELETE",
+    credentials: "include"
+  });
+
+  const data = await res.json();
+  if (data.success) loadActive();
+}
+
+async function restore(id) {
+  await fetch("/admin/restore/" + id, {
+    method: "POST",
+    credentials: "same-origin"
+  });
+  loadDeleted();
+}
+
+document.getElementById("searchBox").addEventListener("input", function () {
+  const keyword = this.value.toLowerCase();
+  const filtered = originalData.filter(row =>
+    Object.values(row).some(v => String(v).toLowerCase().includes(keyword))
+  );
+  render(filtered);
+});
+
+document.getElementById("sortSelect").addEventListener("change", function () {
+  let sorted = [...originalData];
+  if (this.value === "name") sorted.sort((a,b)=>a.name.localeCompare(b.name));
+  if (this.value === "date") sorted.sort((a,b)=>new Date(a.checkin)-new Date(b.checkin));
+  if (this.value === "days") sorted.sort((a,b)=>a.days-b.days);
+  render(sorted);
+});
+
+async function updateStats() {
+  const [a, d] = await Promise.all([
+    fetch("/admin/registrations",{credentials:"same-origin"}),
+    fetch("/admin/deleted",{credentials:"same-origin"})
+  ]);
+  const active = await a.json();
+  const deleted = await d.json();
+
+  document.getElementById("activeCount").innerText = "Active: " + active.length;
+  document.getElementById("deletedCount").innerText = "Deleted: " + deleted.length;
+  document.getElementById("totalCount").innerText = "Total: " + (active.length + deleted.length);
+}
+
+/* ✅ AUTO LOAD */
+loadActive();
 </script>
+<h2 class="copyright">© created by:Deepanshu Chaudhary</h2>
 
 </body>
 </html>
