@@ -4,47 +4,118 @@
   <title>Admin Login</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .pip{
-      width: 323.2px;
-    }
-    .op{
-      text-align: center;
-      justify-content: center;
-    }
-    .mim{
-      margin-right: 20px;
-    }
+    .cardmine{
+  background: rgba(0,0,0,0.8);
+  width: 350px;
+  margin: 60px auto;
+  padding-right: 50px;
+  padding-left: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+}
+.loginbut
+{
+  width: 373.2px;
+}
+.ui:hover{
+  color: brown;
+}
+.copyright{
+  margin-top: 275px;
+  color: red;
+}
+.password-box {
+  position: relative;
+  width: 90%;
+}
+
+.password-box input {
+  width: 100%;
+  padding-right: 45px; /* space for eye */
+}
+
+.password-box img {
+  position: absolute;
+  right: -50px;
+  top: 243%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.password-box img:hover {
+  opacity: 1;
+}
+
   </style>
 </head>
+
 <body class="bg" style="background-image:url('login.jpg')">
-<nav>
-  <a href="index.html">Home</a>
-  <a href="register.html">Register</a>
-  <a href="pricing.html">Pricing</a>
-  <a href="facilities.html">Facilities</a>
-  <a href="admin-login.html">Admin</a>
+  <nav>
+  <a class="ui" href="index.html">Home</a>
+  <a class="ui" href="register.html">Register</a>
+  <a class="ui" href="pricing.html">Pricing</a>
+  <a class="ui" href="facilities.html">Facilities</a>
 </nav>
 
-<div class="card">
-  <h2 class="op">Admin Login</h2>
+<div class="cardmine">
+  <h2>Admin Login</h2>
 
-  <div id="errorBox" class="error-box">
-    Invalid username or password
-  </div>
+  <div id="error" class="error-box" style="display:none">
+  Invalid username or password
+</div>
 
-  <form class="mim" method="POST" action="/admin-login">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button class="pip" type="submit">Login</button>
-  </form>
+<div class="password-box">
+  <input  id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <img src="closeeye.png" id="img" onclick="D()" height="18" width="30" style="margin-left: 340px; z-index: 999; margin-top: -200px;"><span id="sp2"></span>
+</div>
+  
+  <button class="loginbut" onclick="login()">Login</button>
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("error")) {
-    document.getElementById("errorBox").style.display = "block";
-  }
-</script>
+async function login() {
+  const res = await fetch("/admin-login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value
+    })
+  });
 
+  const data = await res.json();
+
+  if (data.success) {
+    window.location.href = "/admin.html"; // 🔥 IMPORTANT
+  } else {
+    document.getElementById("error").style.display = "block";
+  }
+}
+function D()
+        {
+            var t1,img;
+            t1=document.getElementById("password")
+            img=document.getElementById("img")
+
+            if(t1.type=="password")
+            {
+                t1.type="text";
+                img.src="openeye.png";   
+            }
+            else
+            {
+                t1.type="password";
+                img.src="closeeye.png"
+            }
+        }
+</script>
+<h2 class="copyright">© created by:Deepanshu Chaudhary</h2>
 </body>
 </html>
