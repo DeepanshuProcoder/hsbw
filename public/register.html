@@ -1,45 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Register</title>
+  <title>Register | HSBW</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .buttt{
-      margin-right: 20px;;
+    .setregisterbutton{
+      width: 323.2px;
+      background-color: gold;
+    }
+    .setregisterbutton:hover{
+      background-color: darkorange;
+    }
+    .adjustregistration{
+      margin-right: 20px;
+    }
+    .copyright{
+      margin-top: 85px;
+      color: brown;
+    }
+    .ui:hover{
+      color: brown;
     }
   </style>
 </head>
 <body class="bg" style="background-image:url('register.jpg')">
 <nav>
-  <a href="index.html">Home</a>
-  <a href="register.html">Register</a>
-  <a href="pricing.html">Pricing</a>
-  <a href="facilities.html">Facilities</a>
+  <a class="ui" href="index.html">Home</a>
+  <a class="ui" href="register.html">Register</a>
+  <a class="ui" href="pricing.html">Pricing</a>
+  <a class="ui" href="facilities.html">Facilities</a>
 </nav>
 
-<div class="card">
-  <h2>Book Your Stay</h2>
 
-  <div id="successBox" style="display:none;color:lightgreen;text-align:center;">
-    Registration Successful!
+<div class="card">
+  <h2 style="margin-left: 30px; color: aqua;">Register for Home Stay</h2>
+
+  <div id="msg" class="error-box" style="display:none;background:#0f5132;color:#d1e7dd">
+    Registration successful!
   </div>
 
-  <form class="buttt" method="POST" action="/register">
+  <form id="regForm" class="adjustregistration">
     <input name="name" placeholder="Full Name" required>
     <input name="email" type="email" placeholder="Email" required>
     <input name="phone" placeholder="Phone" required>
     <input name="checkin" type="date" required>
     <input name="days" type="number" placeholder="Days" required>
-    <button type="submit">Register</button>
+    <button type="submit" class="setregisterbutton">Register</button>
   </form>
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("success")) {
-    document.getElementById("successBox").style.display = "block";
-  }
-</script>
+document.getElementById("regForm").addEventListener("submit", async function(e) {
+  e.preventDefault(); // 🔥 STOP normal submit
 
+  const formData = new FormData(this);
+  const data = Object.fromEntries(formData.entries());
+
+  const res = await fetch("/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    document.getElementById("msg").style.display = "block";
+    this.reset();
+  }
+});
+</script>
+<h2 class="copyright">© created by:Deepanshu Chaudhary</h2>
 </body>
 </html>
