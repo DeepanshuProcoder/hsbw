@@ -4,18 +4,14 @@
   "description": "Home Stay Business Website",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"No tests\""
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "commonjs",
   "engines": {
     "node": "18.x"
   },
   "dependencies": {
-    "express": "^5.2.1",
+    "express": "^4.19.2",
     "express-session": "^1.17.3",
     "razorpay": "^2.9.6"
   }
